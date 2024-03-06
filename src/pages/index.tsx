@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import { LoadingPage } from "~/components/loading";
-import { RouterOutputs, api } from "~/utils/api";
+import { type RouterOutputs, api } from "~/utils/api";
 import { useState } from "react";
 
 dayjs.extend(relativeTime);
@@ -15,13 +15,13 @@ const CreatePostWizard = () => {
 
   const [input, setInput] = useState("");
 
-  const ctxUtils = api.useUtils()
+  const ctxUtils = api.useUtils();
 
   const { mutate, isLoading: isPosting } = api.post.create.useMutation({
     onSuccess: () => {
       setInput("");
-      ctxUtils.post.getAll.invalidate();
-    }
+      void ctxUtils.post.getAll.invalidate();
+    },
   });
 
   if (!user) return null;
@@ -42,7 +42,7 @@ const CreatePostWizard = () => {
         onChange={(event) => setInput(event.target.value)}
         disabled={isPosting}
       />
-      <button onClick={() => mutate({content: input})}>Post</button>
+      <button onClick={() => mutate({ content: input })}>Post</button>
     </div>
   );
 };
@@ -91,7 +91,7 @@ const Feed = () => {
 };
 
 export default function Home() {
-  const { user, isLoaded: userLoaded, isSignedIn } = useUser();
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
   api.post.getAll.useQuery();
 
