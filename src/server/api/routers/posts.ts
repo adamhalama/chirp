@@ -19,7 +19,7 @@ const ratelimit = new Ratelimit({
   analytics: true,
 });
 
-export const postRouter = createTRPCRouter({
+export const postsRouter = createTRPCRouter({
   getLatest: publicProcedure.query(({ ctx }) => {
     return ctx.db.post.findFirst({
       orderBy: { createdAt: "desc" },
