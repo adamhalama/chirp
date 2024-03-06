@@ -61,14 +61,13 @@ export const postRouter = createTRPCRouter({
 
   create: privateProcedure.input(
     z.object({
-      content: z.string().min(1).max(255)
+      content: z.string().min(1).max(255, "Post must contain max 254 character")
     })
   ).mutation(async ({ ctx, input }) => {
     const authorId = ctx.userId
 
     const { success } = await ratelimit.limit(authorId)
-
-    if (!success) throw new TRPCError({code: "TOO_MANY_REQUESTS"})
+    if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
 
     const post = await ctx.db.post.create({
       data: {

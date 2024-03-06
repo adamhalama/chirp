@@ -23,7 +23,6 @@ import { db } from "~/server/db";
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
   const sesh = getAuth(req);
-  console.log('🚀 ~ createTRPCContext ~ sesh:', sesh)
 
   const userId = sesh.userId
 
