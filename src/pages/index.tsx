@@ -1,7 +1,4 @@
-import {
-  SignInButton,
-  useUser
-} from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 
 import dayjs from "dayjs";
@@ -9,13 +6,23 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import { LoadingPage } from "~/components/loading";
 import { RouterOutputs, api } from "~/utils/api";
+import { useState } from "react";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
 
-  console.log(user);
+  const [input, setInput] = useState("");
+
+  const ctxUtils = api.useUtils()
+
+  const { mutate, isLoading: isPosting } = api.post.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      ctxUtils.post.getAll.invalidate();
+    }
+  });
 
   if (!user) return null;
 
@@ -29,9 +36,13 @@ const CreatePostWizard = () => {
         height={56}
       />
       <input
-        placeholder="Type some emojis!"
-        className="bg-transparent outline-none"
+        placeholder="Type something!"
+        className="grow bg-transparent outline-none"
+        value={input}
+        onChange={(event) => setInput(event.target.value)}
+        disabled={isPosting}
       />
+      <button onClick={() => mutate({content: input})}>Post</button>
     </div>
   );
 };
@@ -57,7 +68,7 @@ const PostView = (props: PostWithUser) => {
             post.createdAt,
           ).fromNow()}`}</span>
         </div>
-        <span>{post.content}</span>
+        <span className="text-xl">{post.content}</span>
       </div>
     </div>
   );
@@ -72,7 +83,7 @@ const Feed = () => {
 
   return (
     <div className="flex flex-col">
-      {[...data, ...data]?.map((fullPost) => (
+      {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
     </div>
@@ -84,8 +95,8 @@ export default function Home() {
 
   api.post.getAll.useQuery();
 
-  if (!userLoaded) return <div />
-  
+  if (!userLoaded) return <div />;
+
   return (
     <>
       <Head>
