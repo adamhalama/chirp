@@ -15,10 +15,10 @@ const CreatePostWizard = () => {
 
   const ctxUtils = api.useUtils();
 
-  const { mutate, isLoading: isPosting } = api.post.create.useMutation({
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("");
-      void ctxUtils.post.getAll.invalidate();
+      void ctxUtils.posts.getAll.invalidate();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -69,7 +69,7 @@ const CreatePostWizard = () => {
 };
 
 const Feed = () => {
-  const { data, isLoading: postsLoading } = api.post.getAll.useQuery();
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
 
   if (postsLoading) return <LoadingPage />;
 
@@ -87,7 +87,7 @@ const Feed = () => {
 export default function Home() {
   const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  api.post.getAll.useQuery();
+  api.posts.getAll.useQuery();
 
   if (!userLoaded) return <div />;
 

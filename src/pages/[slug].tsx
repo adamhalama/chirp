@@ -1,9 +1,13 @@
+import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { PageLayout } from "~/components/layout";
+import { LoadingPage } from "~/components/loading";
+import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
 
 const ProfileFeed = (props: { userId: string }) => {
-  const { data, isLoading } = api.post.getPostsByUserId.useQuery({
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
     userId: props.userId,
   });
 
@@ -12,11 +16,11 @@ const ProfileFeed = (props: { userId: string }) => {
   if (!data || data.length === 0) return <div>User has not posted</div>;
 
   return (
-  <div className="flex flex-col">
-    {data.map((fullPost) => (
-      <PostView {...fullPost} key={fullPost.post.id} />
-    ))}
-  </div>
+    <div className="flex flex-col">
+      {data.map((fullPost) => (
+        <PostView {...fullPost} key={fullPost.post.id} />
+      ))}
+    </div>
   );
 };
 
@@ -50,21 +54,11 @@ export const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   );
 };
 
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import type { GetStaticProps, NextPage } from "next";
-import superjson from "superjson";
-import { PageLayout } from "~/components/layout";
-import { LoadingPage } from "~/components/loading";
-import { PostView } from "~/components/postview";
-import { appRouter } from "~/server/api/root";
-import { db } from "~/server/db";
+import type { GetStaticProps } from "next";
+import { generateSSHelper } from "~/server/helpers/ssgHelper";
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const helpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: { db, userId: null },
-    transformer: superjson,
-  });
+  const helpers = generateSSHelper();
 
   const slug = context.params?.slug;
 
