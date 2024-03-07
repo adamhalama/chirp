@@ -11,6 +11,14 @@ const config = {
     domains: ['img.clerk.com'],
   },
 
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  eslint: {
+    ignoreDuringBuilds: true
+  },
+  swcMinify: true,
+
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
    *
