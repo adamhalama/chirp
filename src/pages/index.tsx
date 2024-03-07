@@ -70,7 +70,6 @@ const CreatePostWizard = () => {
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
-  console.log('🚀 ~ Feed ~ data:', data)
 
   if (postsLoading) return <LoadingPage />;
 
@@ -86,10 +85,7 @@ const Feed = () => {
 };
 
 export default function Home() {
-  const { isLoaded: userLoaded, isSignedIn, user } = useUser();
-  console.log('🚀 ~ Home ~ user:', user)
-  console.log('🚀 ~ Home ~ isSignedIn:', isSignedIn)
-  console.log('🚀 ~ Home ~ userLoaded:', userLoaded)
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
   api.posts.getAll.useQuery();
 
