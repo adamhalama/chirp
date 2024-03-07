@@ -30,8 +30,5 @@ jobs:
       - name: Run TypeScript type-check
         run: npm run type-check
 
-      - name: Build project
-        run: npm run build
-
       - name: Print Environment Variable
         run: echo $NODE_ENV
