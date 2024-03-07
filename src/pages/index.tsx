@@ -1,4 +1,4 @@
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 
 import Image from "next/image";
 import { useState } from "react";
@@ -95,11 +95,9 @@ export default function Home() {
     <>
       <PageLayout>
         <div className="border-b border-slate-400 p-4">
-          {isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
-            </div>
-          )}
+          <div className="flex justify-center">
+            {!isSignedIn ? <SignInButton /> : <SignOutButton />}
+          </div>
           {isSignedIn && <CreatePostWizard />}
         </div>
         <Feed />
