@@ -9,6 +9,7 @@ import { type RouterOutputs, api } from "~/utils/api";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { PageLayout } from "~/components/layout";
 
 dayjs.extend(relativeTime);
 
@@ -129,20 +130,17 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex h-screen justify-center">
-        <div className="h-full w-full border-x border-slate-400 md:max-w-2xl">
-          <div className="border-b border-slate-400 p-4">
-            {isSignedIn && (
-              <div className="flex justify-center">
-                <SignInButton />
-              </div>
-            )}
-            {isSignedIn && <CreatePostWizard />}
-          </div>
-
-          <Feed />
+      <PageLayout>
+        <div className="border-b border-slate-400 p-4">
+          {isSignedIn && (
+            <div className="flex justify-center">
+              <SignInButton />
+            </div>
+          )}
+          {isSignedIn && <CreatePostWizard />}
         </div>
-      </main>
+        <Feed />
+      </PageLayout>
     </>
   );
 }
