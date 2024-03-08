@@ -37,7 +37,7 @@ const CreatePostWizard = () => {
       <Image
         src={user.imageUrl}
         alt="Profile image"
-        className="h-14 w-14 rounded-full"
+        className="size-14 rounded-full"
         width={56}
         height={56}
       />
