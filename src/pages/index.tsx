@@ -1,6 +1,7 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
@@ -34,13 +35,16 @@ const CreatePostWizard = () => {
 
   return (
     <div className="flex w-full gap-3 ">
-      <Image
-        src={user.imageUrl}
-        alt="Profile image"
-        className="size-14 rounded-full"
-        width={56}
-        height={56}
-      />
+      <Link href={`/@${user.username}`}>
+        <Image
+          src={user.imageUrl}
+          alt="Profile image"
+          className="size-14 rounded-full"
+          width={56}
+          height={56}
+        />
+      </Link>
+
       <input
         placeholder="Type something!"
         className="grow bg-transparent outline-none"
