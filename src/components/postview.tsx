@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { type RouterOutputs } from "~/utils/api";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import LinkedProfilePicture from "./linked-profile-picture";
 
 dayjs.extend(relativeTime);
 
@@ -18,15 +18,11 @@ export const PostView = (props: PostWithUser) => {
         key={post.id}
         className="flex gap-3 border-b border-slate-400 p-4 transition-colors duration-200 hover:bg-gray-900"
       >
-        <Link href={`/@${author.username}`}>
-          <Image
-            src={author.profilePicture}
-            className="size-14 rounded-full transition-opacity duration-200 hover:opacity-75"
-            alt={`@${author.username}'s profile picture`}
-            width={56}
-            height={56}
-          />
-        </Link>
+        <LinkedProfilePicture
+          username={author.username}
+          imageUrl={author.profilePicture}
+          size={56}
+        />
 
         <div className="flex flex-col">
           <div className="flex gap-1 text-slate-300">
