@@ -1,8 +1,9 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
-import Feed from "~/components/feed";
 
+import Feed from "~/components/feed";
 import { PageLayout } from "~/components/layout";
 import { CreatePostWizard } from "~/components/post-wizard";
+
 import { api } from "~/utils/api";
 
 export default function Home() {

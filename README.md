@@ -4,7 +4,7 @@
 - **See what the others are chirping about** *(View created posts, also without being signed in)*
 - **Join the other chirpers** *(Sign in using a GitHub Account)*
 - **Chirp your thoughs on the internet** *(Create posts, when signed in)*
-- **See what a chirper is chirping about** *(Clicking on the user @ on a post, will bring up his profile with all of his posts)*
+- **See what a chirper is chirping about** *(Clicking on the user @ on a post, will bring up the profile with all of the posts)*
 - **Focus on a single chirp if its interesting** *(Clicking on the timestamp will bring up the singular post)*
 
 
