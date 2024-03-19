@@ -16,7 +16,7 @@ export const CreatePostWizard = () => {
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("");
-      void ctxUtils.posts.getAll.invalidate();
+      void ctxUtils.posts.infinitePosts.invalidate();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
