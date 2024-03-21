@@ -8,8 +8,8 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
     id,
   });
-  if (!data) return <div>404</div>;
 
+  if (!data) return <div>404</div>;
   return (
     <>
       <Head>
@@ -17,6 +17,15 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       </Head>
       <PageLayout>
         <PostView {...data} />
+        <div className="border border-gray-300 px-5 pb-5 shadow-sm">
+          <span className="pl-16 text-sm">{`Replying to `}</span>
+          <span className="text-sm text-blue-500">{`@${data.author.username}`}</span>
+          <CreatePostWizard
+            defaultText="Post your reply"
+            parentId={data.post.id}
+          />
+        </div>
+        <Feed parentId={id} direction="forward" />
       </PageLayout>
     </>
   );
@@ -24,6 +33,8 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
 
 import type { GetStaticProps } from "next";
 import { generateSSHelper } from "~/server/helpers/ssgHelper";
+import { CreatePostWizard } from "~/components/post-wizard";
+import Feed from "~/components/feed";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const helpers = generateSSHelper();

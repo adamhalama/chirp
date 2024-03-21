@@ -6,10 +6,12 @@ import { api } from "~/utils/api";
 
 import { useInView } from "react-intersection-observer";
 
-const Feed = () => {
+const Feed = ({parentId, direction}: {parentId?: string, direction?: "backward" | "forward"}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     api.posts.infinitePosts.useInfiniteQuery(
       {
+        parentId,
+        direction,
         limit: 10,
       },
       {
