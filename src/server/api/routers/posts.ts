@@ -4,13 +4,17 @@ import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
 
+import type { Prisma } from "@prisma/client";
 import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
-import type { Post, Prisma } from "@prisma/client";
+import { PostWithChildren } from "~/shared/types";
 
+const includeChildren = {
+  children: true,
+}
 
-const addUserDataToPosts = async (posts: Post[]) => {
+const addUserDataToPosts = async (posts: PostWithChildren[]) => {
   const users = (
     await clerkClient.users.getUserList({
       userId: posts.map((post) => post.authorId),
@@ -52,6 +56,7 @@ export const postsRouter = createTRPCRouter({
         where: {
           id: input.id
         },
+        include: includeChildren,
       })
       if (!post) throw new TRPCError({ code: "NOT_FOUND" })
 
@@ -64,7 +69,8 @@ export const postsRouter = createTRPCRouter({
       take: 100,
       orderBy: [
         { createdAt: "desc" }
-      ]
+      ],
+      include: includeChildren,
     })
 
     return addUserDataToPosts(posts);
@@ -83,15 +89,16 @@ export const postsRouter = createTRPCRouter({
       const { limit, cursor, direction } = input;
 
       const posts = await ctx.db.post.findMany({
-        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        take: limit + 1,
         cursor: cursor ? { id: cursor?.id, createdAt: cursor?.createdAt } : undefined,
         where: {
           parentId: input.parentId ? { equals: input.parentId } : { equals: null }
-         },
+        },
         orderBy: [
           { createdAt: direction === 'backward' ? 'desc' : 'asc' },
           { id: 'desc' }
-        ]
+        ],
+        include: includeChildren
       });
 
       let nextCursor: typeof cursor | undefined = undefined;
@@ -115,7 +122,8 @@ export const postsRouter = createTRPCRouter({
         authorId: input.userId
       },
       take: 100,
-      orderBy: [{ createdAt: "desc" }]
+      orderBy: [{ createdAt: "desc" }],
+      include: includeChildren,
     }).then(addUserDataToPosts)
   ),
 

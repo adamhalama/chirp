@@ -41,17 +41,23 @@ export const PostView = (props: PostWithUser) => {
           </span>
         </div>
         <span>{post.content}</span>
-        <div className="flex flex-col text-sm">
-          {/* <Image
+        <div className="group flex gap-1 pt-2">
+          <div
+            className="rounded-full transition-all duration-300 ease-in-out"
+            style={{
+              boxShadow: "0 0 20px 10px rgba(59, 130, 246, 0.5)", // Adjust the RGBA values to change the color and opacity
+            }}
+          >
+            <Image
               src="/icons/comment.svg"
               alt="Comment"
-              width={24}
-              height={24}
-              className="transition duration-300 hover:text-blue-500"
-            /> */}
-          <div className="hover:brightness-125 hover:hue-rotate-180 hover:saturate-200">
-            <Image src="/icons/comment.svg" alt="Comment" width={24} height={24} />
+              width={20}
+              height={20}
+            />
           </div>
+          <span className="text-sm text-slate-300 group-hover:text-blue-500">
+            {post.children.length}
+          </span>
         </div>
       </div>
     </div>
