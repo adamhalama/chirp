@@ -9,6 +9,11 @@ import router from "next/router";
 
 dayjs.extend(relativeTime);
 
+const styles = {
+  transition: "transition-all duration-200 ease-in-out",
+  haloEffect: "absolute inset-0 rounded-full opacity-0 group-hover:opacity-100",
+};
+
 type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 
 export const PostView = (props: PostWithUser) => {
@@ -22,7 +27,7 @@ export const PostView = (props: PostWithUser) => {
     <div
       key={post.id}
       onClick={handleNavigate}
-      className="flex gap-3 border-b border-slate-400 p-4 transition-colors duration-200 hover:bg-gray-900"
+      className={`${styles.transition} flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900`}
     >
       <LinkedProfilePicture
         username={author.username}
@@ -41,21 +46,28 @@ export const PostView = (props: PostWithUser) => {
           </span>
         </div>
         <span>{post.content}</span>
-        <div className="group flex gap-1 pt-2">
-          <div
-            className="rounded-full transition-all duration-300 ease-in-out"
-            style={{
-              boxShadow: "0 0 20px 10px rgba(59, 130, 246, 0.5)", // Adjust the RGBA values to change the color and opacity
-            }}
-          >
+
+        <div className="group flex pt-2">
+          <div className="relative inline-block">
+            <div
+              className={`${styles.haloEffect} ${styles.transition}`}
+              style={{
+                boxShadow: "0 0 2px 8px rgba(59, 130, 246, 0.3)", // Halo effect
+                background: "rgba(59, 130, 246, 0.3)", // Subtle background color for the halo
+                mixBlendMode: "screen",
+              }}
+            ></div>
             <Image
               src="/icons/comment.svg"
               alt="Comment"
-              width={20}
-              height={20}
+              width={18}
+              height={18}
+              className={`${styles.transition} relative z-10 group-hover:mix-blend-overlay`}
             />
           </div>
-          <span className="text-sm text-slate-300 group-hover:text-blue-500">
+          <span
+            className={`${styles.transition} pl-1 text-sm text-slate-300 group-hover:text-blue-500`}
+          >
             {post.children.length}
           </span>
         </div>
