@@ -4,15 +4,11 @@ import { type RouterOutputs } from "~/utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import LinkedProfilePicture from "./linked-profile-picture";
-import Image from "next/image";
 import router from "next/router";
+import AnimatedIcon from "./animated-icon";
+import styles from "~/styles/styles";
 
 dayjs.extend(relativeTime);
-
-const styles = {
-  transition: "transition-all duration-200 ease-in-out",
-  haloEffect: "absolute inset-0 rounded-full opacity-0 group-hover:opacity-100",
-};
 
 type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 
@@ -45,33 +41,17 @@ export const PostView = (props: PostWithUser) => {
             {`${dayjs(post.createdAt).fromNow()}`}
           </span>
         </div>
+
         <span>{post.content}</span>
 
         <div className="flex pt-2">
-          <div className="group flex">
-            <div className="relative inline-block">
-              <div
-                className={`${styles.haloEffect} ${styles.transition}`}
-                style={{
-                  boxShadow: "0 0 2px 8px rgba(59, 130, 246, 0.3)", // Halo effect
-                  background: "rgba(59, 130, 246, 0.3)", // Subtle background color for the halo
-                  mixBlendMode: "screen",
-                }}
-              ></div>
-              <Image
-                src="/icons/comment.svg"
-                alt="Comment"
-                width={18}
-                height={18}
-                className={`${styles.transition} relative z-10 group-hover:mix-blend-overlay`}
-              />
-            </div>
-            <span
-              className={`${styles.transition} pl-1 text-sm text-slate-300 group-hover:text-blue-500`}
-            >
-              {post.children.length}
-            </span>
-          </div>
+          <AnimatedIcon
+            src="/icons/comment.svg"
+            alt="comment"
+            width={18}
+            height={18}
+            count={post.children.length}
+          />
         </div>
       </div>
     </div>
