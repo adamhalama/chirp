@@ -1,9 +1,11 @@
+import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Feed from "~/components/feed";
 import { PageLayout } from "~/components/layout";
+import { CreatePostWizard } from "~/components/post-wizard";
 import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
-import { useUser } from "@clerk/nextjs";
 
 export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
@@ -39,8 +41,6 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
 
 import type { GetStaticProps } from "next";
 import { generateSSHelper } from "~/server/helpers/ssgHelper";
-import { CreatePostWizard } from "~/components/post-wizard";
-import Feed from "~/components/feed";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const helpers = generateSSHelper();
