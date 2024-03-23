@@ -1,6 +1,9 @@
+import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Feed from "~/components/feed";
 import { PageLayout } from "~/components/layout";
+import { CreatePostWizard } from "~/components/post-wizard";
 import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
 
@@ -8,6 +11,9 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
     id,
   });
+
+  const { isSignedIn } = useUser();
+
   if (!data) return <div>404</div>;
 
   return (
@@ -17,6 +23,17 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       </Head>
       <PageLayout>
         <PostView {...data} />
+        {isSignedIn && (
+          <div className="border border-gray-300 px-5 pb-5 shadow-sm">
+            <span className="pl-16 text-sm">{`Replying to `}</span>
+            <span className="text-sm text-blue-500">{`@${data.author.username}`}</span>
+            <CreatePostWizard
+              defaultText="Post your reply"
+              parentId={data.post.id}
+            />
+          </div>
+        )}
+        <Feed parentId={id} direction="forward" />
       </PageLayout>
     </>
   );

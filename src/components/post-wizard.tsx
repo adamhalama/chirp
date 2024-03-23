@@ -6,7 +6,7 @@ import { LoadingSpinner } from "~/components/loading";
 import { api } from "~/utils/api";
 import LinkedProfilePicture from "./linked-profile-picture";
 
-export const CreatePostWizard = () => {
+export const CreatePostWizard = ({defaultText, parentId}: {defaultText?: string, parentId?: string}) => {
   const { user } = useUser();
 
   const [input, setInput] = useState("");
@@ -39,22 +39,22 @@ export const CreatePostWizard = () => {
       />
 
       <input
-        placeholder="Type something!"
-        className="grow bg-transparent outline-none"
+        placeholder={defaultText ?? "Chirp something!"}
+        className="grow bg-transparent text-xl outline-none"
         value={input}
         onChange={(event) => setInput(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
             event.preventDefault();
             if (input !== "") {
-              mutate({ content: input });
+              mutate({ content: input, parentId });
             }
           }
         }}
         disabled={isPosting}
       />
       {input !== "" && (
-        <button onClick={() => mutate({ content: input })}>Post</button>
+        <button onClick={() => mutate({ content: input, parentId })}>Post</button>
       )}
       {isPosting && (
         <div className="flex items-center justify-center">

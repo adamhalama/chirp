@@ -4,13 +4,17 @@ import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
 
+import type { Prisma } from "@prisma/client";
 import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
-import type { Post } from "@prisma/client";
+import { PostWithChildren } from "~/shared/types";
 
+const includeChildren = {
+  children: true,
+}
 
-const addUserDataToPosts = async (posts: Post[]) => {
+const addUserDataToPosts = async (posts: PostWithChildren[]) => {
   const users = (
     await clerkClient.users.getUserList({
       userId: posts.map((post) => post.authorId),
@@ -44,6 +48,7 @@ const ratelimit = new Ratelimit({
 });
 
 export const postsRouter = createTRPCRouter({
+  // READ
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -51,6 +56,7 @@ export const postsRouter = createTRPCRouter({
         where: {
           id: input.id
         },
+        include: includeChildren,
       })
       if (!post) throw new TRPCError({ code: "NOT_FOUND" })
 
@@ -63,13 +69,15 @@ export const postsRouter = createTRPCRouter({
       take: 100,
       orderBy: [
         { createdAt: "desc" }
-      ]
+      ],
+      include: includeChildren,
     })
 
     return addUserDataToPosts(posts);
   }),
 
   infinitePosts: publicProcedure.input(z.object({
+    parentId: z.string().optional(),
     limit: z.number().int().min(1).max(100).default(10),
     cursor: z.object({
       id: z.string().optional(),
@@ -81,12 +89,16 @@ export const postsRouter = createTRPCRouter({
       const { limit, cursor, direction } = input;
 
       const posts = await ctx.db.post.findMany({
-        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        take: limit + 1,
         cursor: cursor ? { id: cursor?.id, createdAt: cursor?.createdAt } : undefined,
+        where: {
+          parentId: input.parentId ? { equals: input.parentId } : { equals: null }
+        },
         orderBy: [
           { createdAt: direction === 'backward' ? 'desc' : 'asc' },
           { id: 'desc' }
-        ]
+        ],
+        include: includeChildren
       });
 
       let nextCursor: typeof cursor | undefined = undefined;
@@ -110,28 +122,37 @@ export const postsRouter = createTRPCRouter({
         authorId: input.userId
       },
       take: 100,
-      orderBy: [{ createdAt: "desc" }]
+      orderBy: [{ createdAt: "desc" }],
+      include: includeChildren,
     }).then(addUserDataToPosts)
   ),
 
+  // CREATE
   create: privateProcedure.input(
     z.object({
-      content: z.string().min(1).max(255, "Post must contain max 255 character")
+      content: z.string().min(1).max(255, "Post must contain max 255 character"),
+      parentId: z.string().optional(),
     })
   ).mutation(async ({ ctx, input }) => {
     const authorId = ctx.userId
+    const { parentId, content } = input
 
     const { success } = await ratelimit.limit(authorId)
     if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
 
+    const data: Prisma.PostCreateInput = {
+      authorId,
+      content,
+    };
+
+    if (parentId) {
+      data.parent = { connect: { id: parentId } };
+    }
+
     const post = await ctx.db.post.create({
-      data: {
-        authorId,
-        content: input.content
-      }
-    })
+      data,
+    });
 
     return post;
   }),
-
 });
