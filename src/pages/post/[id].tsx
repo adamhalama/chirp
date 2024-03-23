@@ -3,13 +3,17 @@ import Head from "next/head";
 import { PageLayout } from "~/components/layout";
 import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
+import { useUser } from "@clerk/nextjs";
 
 export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
     id,
   });
 
+  const { isSignedIn } = useUser();
+
   if (!data) return <div>404</div>;
+
   return (
     <>
       <Head>
@@ -17,14 +21,16 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       </Head>
       <PageLayout>
         <PostView {...data} />
-        <div className="border border-gray-300 px-5 pb-5 shadow-sm">
-          <span className="pl-16 text-sm">{`Replying to `}</span>
-          <span className="text-sm text-blue-500">{`@${data.author.username}`}</span>
-          <CreatePostWizard
-            defaultText="Post your reply"
-            parentId={data.post.id}
-          />
-        </div>
+        {isSignedIn && (
+          <div className="border border-gray-300 px-5 pb-5 shadow-sm">
+            <span className="pl-16 text-sm">{`Replying to `}</span>
+            <span className="text-sm text-blue-500">{`@${data.author.username}`}</span>
+            <CreatePostWizard
+              defaultText="Post your reply"
+              parentId={data.post.id}
+            />
+          </div>
+        )}
         <Feed parentId={id} direction="forward" />
       </PageLayout>
     </>
