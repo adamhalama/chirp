@@ -140,17 +140,17 @@ export const postsRouter = createTRPCRouter({
     const { success } = await ratelimit.limit(authorId)
     if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
 
-    const postData: Prisma.PostCreateInput = {
+    const data: Prisma.PostCreateInput = {
       authorId,
       content,
     };
 
     if (parentId) {
-      postData.parent = { connect: { id: parentId } };
+      data.parent = { connect: { id: parentId } };
     }
 
     const post = await ctx.db.post.create({
-      data: postData,
+      data,
     });
 
     return post;
