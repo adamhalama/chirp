@@ -10,7 +10,7 @@ body {
 
 /* Custom Tailwind Classes */
 
-.custom-transition {
+.custom-transition-200 {
   @apply transition-all duration-200 ease-in-out;
 }
 
