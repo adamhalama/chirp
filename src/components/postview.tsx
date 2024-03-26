@@ -22,7 +22,11 @@ export const PostView = (props: PostWithUser) => {
     <div
       key={post.id}
       onClick={handleNavigate}
+<<<<<<< HEAD
       className="custom-transition-200 flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
+=======
+      className="custom-transition flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
+>>>>>>> 6108da3 (ref of TW classes of animated-icon)
     >
       <LinkedProfilePicture
         username={author.username}

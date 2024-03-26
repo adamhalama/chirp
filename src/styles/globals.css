@@ -10,7 +10,11 @@ body {
 
 /* Custom Tailwind Classes */
 
+<<<<<<< HEAD
 .custom-transition-200 {
+=======
+.custom-transition {
+>>>>>>> 6108da3 (ref of TW classes of animated-icon)
   @apply transition-all duration-200 ease-in-out;
 }
 
