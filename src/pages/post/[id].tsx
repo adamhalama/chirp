@@ -14,7 +14,12 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
 
   const { isSignedIn } = useUser();
 
-  if (!data) return <div>404</div>;
+  const { data: thread } = api.posts.getByIdWithParents.useQuery({
+    id,
+  });
+  console.log('🚀 ~ thread in [id]:', thread)
+
+if (!data || !thread) return <div>404</div>;
 
   return (
     <>
@@ -22,7 +27,7 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
         <title>{`${data.post.content} - @${data.author.username}`}</title>
       </Head>
       <PageLayout>
-        <PostView {...data} />
+        <PostView {...thread} />
         {isSignedIn && (
           <div className="border border-gray-300 px-5 pb-5 shadow-sm">
             <span className="pl-16 text-sm">{`Replying to `}</span>
