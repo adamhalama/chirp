@@ -9,6 +9,7 @@ import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
 import { PostWithChildren } from "~/shared/types";
+import { fetchPostWithParents } from "../helpers";
 
 const includeChildren = {
   children: true,
@@ -126,6 +127,14 @@ export const postsRouter = createTRPCRouter({
       include: includeChildren,
     }).then(addUserDataToPosts)
   ),
+
+  getByIdWithParents: publicProcedure
+  .input(z.object({ id: z.string(), limit: z.number().optional() }))
+  .query(async ({ ctx, input }) => {
+    const { id, limit = 5 } = input;
+    const postsChain = await fetchPostWithParents(ctx, id, limit);
+    return addUserDataToPosts(postsChain); // Assuming you want to include user details
+  }),
 
   // CREATE
   create: privateProcedure.input(
