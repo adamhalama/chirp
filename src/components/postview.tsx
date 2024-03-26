@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { type RouterOutputs } from "~/utils/api";
-
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import LinkedProfilePicture from "./linked-profile-picture";
@@ -9,50 +8,66 @@ import AnimatedIcon from "./animated-icon";
 
 dayjs.extend(relativeTime);
 
-type PostWithUser = RouterOutputs["posts"]["getAll"][number];
+type PostWithUser = RouterOutputs["posts"]["getByIdWithParents"][number];
 
-export const PostView = (props: PostWithUser) => {
-  const { post, author } = props;
+export const PostView = (thread: PostWithUser[]) => {
+  console.log("🚀 ~ {thread in postview.tsx~ thread:", thread);
 
-  const handleNavigate = () => {
-    router.push(`/post/${post.id}`);
-  };
-
+  const threadArray = Object.values(thread);
   return (
-    <div
-      key={post.id}
-      onClick={handleNavigate}
-      className="custom-transition-200 flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
-    >
-      <LinkedProfilePicture
-        username={author.username}
-        imageUrl={author.profilePicture}
-        size={56}
-      />
+    <div>
+      {threadArray.map((item, index) => {
+        const { post, author } = item;
+        const isMainPost = index === thread.length - 1;
+        const handleClick = () => router.push(`/post/${post.id}`);
 
-      <div className="flex flex-col">
-        <div className="flex gap-1 text-slate-300">
-          <Link href={`/@${author.username}`} className="hover:underline">
-            <span>{`@${author.username}`}</span>
-          </Link>
-          <span>{` ·`}</span>
-          <span className="font-thin">
-            {`${dayjs(post.createdAt).fromNow()}`}
-          </span>
-        </div>
+        return (
+          <div
+            key={post.id}
+            onClick={handleClick}
+            className={`flex flex-col ${isMainPost ? "" : "ml-4 border-l-2 border-slate-400 pl-4"} my-2`}
+          >
+            <div className="flex gap-3">
+              <LinkedProfilePicture
+                username={author.username}
+                imageUrl={author.profilePicture}
+                size={isMainPost ? 56 : 40}
+              />
 
-        <span>{post.content}</span>
+              <div
+                className={`flex flex-col ${isMainPost ? "text-base" : "text-sm"}`}
+              >
+                <div className="flex gap-1 text-slate-300">
+                  <Link
+                    href={`/@${author.username}`}
+                    className="hover:underline"
+                  >
+                    <span>{`@${author.username}`}</span>
+                  </Link>
+                  <span>{` ·`}</span>
+                  <span className="font-thin">
+                    {dayjs(post.createdAt).fromNow()}
+                  </span>
+                </div>
 
-        <div className="flex pt-2">
-          <AnimatedIcon
-            src="/icons/comment.svg"
-            alt="comment"
-            width={18}
-            height={18}
-            count={post.children.length}
-          />
-        </div>
-      </div>
+                <span>{post.content}</span>
+
+                {isMainPost && (
+                  <div className="flex pt-2">
+                    <AnimatedIcon
+                      src="/icons/comment.svg"
+                      alt="comment"
+                      width={18}
+                      height={18}
+                      count={post.children.length}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
