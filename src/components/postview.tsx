@@ -6,7 +6,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import LinkedProfilePicture from "./linked-profile-picture";
 import router from "next/router";
 import AnimatedIcon from "./animated-icon";
-import styles from "~/styles/styles";
 
 dayjs.extend(relativeTime);
 
@@ -23,7 +22,7 @@ export const PostView = (props: PostWithUser) => {
     <div
       key={post.id}
       onClick={handleNavigate}
-      className={`${styles.transition} flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900`}
+      className="custom-transition-200 flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
     >
       <LinkedProfilePicture
         username={author.username}

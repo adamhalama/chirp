@@ -3,7 +3,17 @@
 @tailwind utilities;
 
 body {
-    @apply bg-black text-slate-100;
+  @apply bg-black text-slate-100;
 
-    overscroll-behavior: none;
+  overscroll-behavior: none;
+}
+
+/* Custom Tailwind Classes */
+
+.custom-transition-200 {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.custom-halo-effect {
+  @apply absolute inset-0 rounded-full opacity-0 group-hover:opacity-100;
 }
