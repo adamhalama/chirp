@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/nextjs";
-import { Post, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { PostWithChildren } from "~/shared/types";
@@ -13,7 +13,7 @@ type Context = {
     userId: string | null;
 }
 
-export const addUserDataToPostsWithChildren = async (posts: PostWithChildren[]) => {
+export const addUserDataToPosts = async (posts: PostWithChildren[]) => {
     const users = (
         await clerkClient.users.getUserList({
             userId: posts.map((post) => post.authorId),
@@ -39,36 +39,11 @@ export const addUserDataToPostsWithChildren = async (posts: PostWithChildren[]) 
     });
 }
 
-export const addUserDataToPosts = async (posts: Post[]) => {
-    const users = (
-        await clerkClient.users.getUserList({
-            userId: posts.map((post) => post.authorId),
-            limit: 100
-        })
-    ).map(filterUserForClient)
-
-    return posts.map((post) => {
-        const author = users.find(user => user.id === post.authorId)
-
-        if (!author?.username) throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Author for post not found"
-        })
-
-        return {
-            post,
-            author: {
-                ...author,
-                username: author.username
-            }
-        }
-    });
-}
 
 export const fetchPostWithParents = async (ctx: Context, postId: string, limit = 5) => {
     let currentPost = await ctx.db.post.findUnique({
         where: { id: postId },
-        include: includeChildren
+        include: includeChildren,
     });
     console.log('🚀 ~ fetchPostWithParents ~ currentPost:', currentPost)
 

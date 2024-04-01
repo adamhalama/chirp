@@ -26,7 +26,7 @@ export const PostView = ({ postWithUser }: PostProps) => {
     <div
       key={post.id}
       onClick={handleNavigate}
-      className="custom-transition-200 flex-row gap-3 border-b border-slate-400 px-4 pt-4 transition-colors hover:bg-gray-900"
+      className="custom-transition-200 flex-row gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
     >
       <div className="flex min-w-max flex-row gap-3 pb-4">
         <LinkedProfilePicture
@@ -48,7 +48,7 @@ export const PostView = ({ postWithUser }: PostProps) => {
         <span>{post.content}</span>
       </div>
 
-      <div className="flex border-t border-slate-400 py-2">
+      <div className="flex border-t border-slate-400 pt-2">
         <div className="px-2">
           <AnimatedIcon
             IconComponent={CommentSvg}

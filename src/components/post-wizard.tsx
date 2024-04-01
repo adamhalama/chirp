@@ -35,7 +35,7 @@ export const CreatePostWizard = ({defaultText, parentId}: {defaultText?: string,
       <LinkedProfilePicture
         username={"@" + user.username}
         imageUrl={user.imageUrl}
-        size={56}
+        pixelCount={56}
       />
 
       <input
