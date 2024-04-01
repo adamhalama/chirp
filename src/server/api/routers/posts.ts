@@ -105,7 +105,6 @@ export const postsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { id, limit = 5 } = input;
       const postsChain = await fetchPostWithParents(ctx, id, limit);
-      console.log('🚀 ~ .query ~ postsChain:', postsChain)
 
       return await addUserDataToPosts(postsChain);
     }),
