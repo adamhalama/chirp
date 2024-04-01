@@ -5,16 +5,18 @@ import Link from "next/link";
 const LinkedProfilePicture = (props: {
   username: string;
   imageUrl: string;
-  size: number;
+  pixelCount?: number;
+  size?: number;
 }) => {
+  const usedSize = `size-${props.size}` ?? "size-14";
   return (
     <Link href={`/@${props.username}`}>
         <Image
           src={props.imageUrl}
           alt={`@${props.username}'s profile picture`}
-          className="size-14 rounded-full transition-opacity duration-200 hover:opacity-75"
-          width={props.size ?? 56}
-          height={props.size ?? 56}
+          className={`${usedSize} rounded-full transition-opacity duration-200 hover:opacity-75`}
+          width={props.pixelCount ?? 56}
+          height={props.pixelCount ?? 56}
         />
     </Link>
   );

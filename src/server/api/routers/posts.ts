@@ -1,4 +1,3 @@
-import { clerkClient } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -7,40 +6,13 @@ import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/ap
 import type { Prisma } from "@prisma/client";
 import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
-import { filterUserForClient } from "~/server/helpers/filterUserForClient";
-import { PostWithChildren } from "~/shared/types";
+import { addUserDataToPosts, fetchPostWithParents } from "../helpers";
 
-const includeChildren = {
+export const includeChildren = {
   children: true,
 }
 
-const addUserDataToPosts = async (posts: PostWithChildren[]) => {
-  const users = (
-    await clerkClient.users.getUserList({
-      userId: posts.map((post) => post.authorId),
-      limit: 100
-    })
-  ).map(filterUserForClient)
-
-  return posts.map((post) => {
-    const author = users.find(user => user.id === post.authorId)
-
-    if (!author?.username) throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Author for post not found"
-    })
-
-    return {
-      post,
-      author: {
-        ...author,
-        username: author.username
-      }
-    }
-  });
-}
-
-// Create a new ratelimiter, that allows 3 requests per 1 minute
+// Ratelimiter, that allows 3 requests per 1 minute
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(3, "1 m"),
@@ -124,8 +96,18 @@ export const postsRouter = createTRPCRouter({
       take: 100,
       orderBy: [{ createdAt: "desc" }],
       include: includeChildren,
-    }).then(addUserDataToPosts)
+    })
+      .then(addUserDataToPosts)
   ),
+
+  getByIdWithParents: publicProcedure
+    .input(z.object({ id: z.string(), limit: z.number().optional() }))
+    .query(async ({ ctx, input }) => {
+      const { id, limit = 5 } = input;
+      const postsChain = await fetchPostWithParents(ctx, id, limit);
+
+      return await addUserDataToPosts(postsChain);
+    }),
 
   // CREATE
   create: privateProcedure.input(

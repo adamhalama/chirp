@@ -4,8 +4,8 @@ import Head from "next/head";
 import Feed from "~/components/feed";
 import { PageLayout } from "~/components/layout";
 import { CreatePostWizard } from "~/components/post-wizard";
-import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
+import ThreadPostView from "~/components/thread-post";
 
 export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
@@ -14,7 +14,11 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
 
   const { isSignedIn } = useUser();
 
-  if (!data) return <div>404</div>;
+  const { data: thread } = api.posts.getByIdWithParents.useQuery({
+    id,
+  });
+
+  if (!data || !thread) return <div>404</div>;
 
   return (
     <>
@@ -22,7 +26,7 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
         <title>{`${data.post.content} - @${data.author.username}`}</title>
       </Head>
       <PageLayout>
-        <PostView {...data} />
+        <ThreadPostView thread={thread} />
         {isSignedIn && (
           <div className="border border-gray-300 px-5 pb-5 shadow-sm">
             <span className="pl-16 text-sm">{`Replying to `}</span>

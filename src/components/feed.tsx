@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 
 import { LoadingPage } from "~/components/loading";
-import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
 
 import { useInView } from "react-intersection-observer";
+import { FeedPostView } from "./feed-postview";
 
 const Feed = ({
   parentId,
@@ -40,7 +40,7 @@ const Feed = ({
     <div className="flex flex-col">
       {data.pages.flatMap((page) =>
         page.items.map((fullPost) => (
-          <PostView {...fullPost} key={fullPost.post.id} />
+          <FeedPostView postWithUser={fullPost} key={fullPost.post.id} />
         )),
       )}
       <div ref={ref}>{isFetchingNextPage ? <LoadingPage /> : null}</div>

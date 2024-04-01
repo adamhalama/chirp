@@ -3,7 +3,6 @@ import Head from "next/head";
 import Image from "next/image";
 import { PageLayout } from "~/components/layout";
 import { LoadingPage } from "~/components/loading";
-import { PostView } from "~/components/postview";
 import { api } from "~/utils/api";
 
 const ProfileFeed = (props: { userId: string }) => {
@@ -18,7 +17,7 @@ const ProfileFeed = (props: { userId: string }) => {
   return (
     <div className="flex flex-col">
       {data.map((fullPost) => (
-        <PostView {...fullPost} key={fullPost.post.id} />
+        <FeedPostView postWithUser={fullPost} />
       ))}
     </div>
   );
@@ -42,7 +41,7 @@ export const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             alt={`${data.username}'s profile picture`}
             width={128}
             height={128}
-            className="absolute bottom-0 left-0 mb-[64px] ml-4 rounded-full border-4 border-black bg-black"
+            className="absolute bottom-0 left-0 mb-[-64px] ml-4 rounded-full border-4 border-black bg-black"
           />
         </div>
         <div className="h-[64px]"></div>
@@ -55,6 +54,7 @@ export const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 };
 
 import type { GetStaticProps } from "next";
+import { FeedPostView } from "~/components/feed-postview";
 import { generateSSHelper } from "~/server/helpers/ssgHelper";
 
 export const getStaticProps: GetStaticProps = async (context) => {
