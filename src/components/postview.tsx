@@ -3,8 +3,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import router from "next/router";
 import { type RouterOutputs } from "~/utils/api";
-import AnimatedIcon from "./animated-icon";
-import CommentSvg from "./icons/comment";
+import AnimatedIcon from "./icons/animated-icon";
+import CommentSvg from "./icons/comment-icon";
 import LinkedProfilePicture from "./linked-profile-picture";
 
 dayjs.extend(relativeTime);

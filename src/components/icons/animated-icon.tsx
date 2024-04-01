@@ -1,4 +1,4 @@
-import { SvgIconProps } from "./icons/comment";
+import { SvgIconProps } from "./comment-icon";
 
 interface AnimatedIconProps {
   IconComponent: React.FC<SvgIconProps>;

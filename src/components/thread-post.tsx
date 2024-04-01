@@ -4,8 +4,8 @@ import router from "next/router";
 import { RouterOutputs } from "~/utils/api";
 import LinkedProfilePicture from "./linked-profile-picture";
 import { PostView } from "./postview";
-import AnimatedIcon from "./animated-icon";
-import CommentSvg from "./icons/comment";
+import AnimatedIcon from "./icons/animated-icon";
+import CommentSvg from "./icons/comment-icon";
 
 type PostWithUser = RouterOutputs["posts"]["getByIdWithParents"][number];
 
