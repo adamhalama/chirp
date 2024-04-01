@@ -45,14 +45,12 @@ export const fetchPostWithParents = async (ctx: Context, postId: string, limit =
         where: { id: postId },
         include: includeChildren,
     });
-    console.log('🚀 ~ fetchPostWithParents ~ currentPost:', currentPost)
 
     if (!currentPost) {
         throw new TRPCError({ code: "NOT_FOUND" });
     }
 
     const postsChain = [currentPost];
-    console.log('🚀 ~ fetchPostWithParents ~ postsChain:', postsChain)
     while (currentPost.parentId && postsChain.length < limit) {
         currentPost = await ctx.db.post.findUnique({
             where: { id: currentPost.parentId },
