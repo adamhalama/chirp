@@ -17,9 +17,8 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data: thread } = api.posts.getByIdWithParents.useQuery({
     id,
   });
-  console.log('🚀 ~ thread in [id]:', thread)
 
-if (!data || !thread) return <div>404</div>;
+  if (!data || !thread) return <div>404</div>;
 
   return (
     <>
