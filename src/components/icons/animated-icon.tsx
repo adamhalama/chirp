@@ -1,17 +1,15 @@
-import { SvgIconProps } from "./comment-icon";
+import { SvgIconProps } from "./comment-icon-svg";
 
 interface AnimatedIconProps {
   IconComponent: React.FC<SvgIconProps>;
   width: number;
   height: number;
-  count: number;
 }
 
 const AnimatedIcon: React.FC<AnimatedIconProps> = ({
   IconComponent,
   width,
   height,
-  count,
 }) => (
   <div className="group flex">
     <div className="relative inline-block">
@@ -22,9 +20,6 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({
         className="custom-transition-200 bg-blend-overlay group-hover:fill-custom-blue group-hover:stroke-custom-blue"
       />
     </div>
-    <span className="custom-transition-200 select-none pl-1 text-sm text-slate-300 group-hover:text-blue-500">
-      {count}
-    </span>
   </div>
 );
 

@@ -5,7 +5,7 @@ import { RouterOutputs } from "~/utils/api";
 import LinkedProfilePicture from "./linked-profile-picture";
 import { PostView } from "./postview";
 import AnimatedIcon from "./icons/animated-icon";
-import CommentSvg from "./icons/comment-icon";
+import CommentIconSvg from "./icons/comment-icon-svg";
 
 type PostWithUser = RouterOutputs["posts"]["getByIdWithParents"][number];
 
@@ -46,13 +46,11 @@ const ThreadParentPost = ({ postWithUser }: PostProps) => {
 
         <span>{post.content}</span>
 
-        <div className="flex pt-2">
-        <AnimatedIcon
-            IconComponent={CommentSvg} 
-            width={18}
-            height={18}
-            count={post.children.length}
-          />
+        <div className="group flex pt-2">
+          <AnimatedIcon IconComponent={CommentIconSvg} width={18} height={18} />
+          <span className="custom-transition-200 select-none pl-1 text-sm text-slate-300 group-hover:text-blue-500">
+            {post.children.length}
+          </span>
         </div>
       </div>
     </div>
