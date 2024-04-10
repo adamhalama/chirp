@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-    provider     = "mysql"
+    provider     = "postgresql"
     url          = env("DATABASE_URL")
+    directUrl    = env("DIRECT_URL")
     relationMode = "prisma"
 }
 
@@ -19,7 +20,7 @@ model Post {
     authorId String
 
     parentId String?
-    parent   Post?   @relation("PostToPost", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parent   Post?   @relation("PostToPost", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     children Post[]  @relation("PostToPost")
 
     @@index([authorId])
