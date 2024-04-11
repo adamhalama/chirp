@@ -26,7 +26,7 @@ export const addUserDataToPosts = async (posts: PostWithChildren[]) => {
 
         if (!author?.username) throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
-            message: "Author for post not found"
+            message: "Author for post not found or is missing a username"
         })
 
         return {

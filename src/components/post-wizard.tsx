@@ -33,9 +33,9 @@ export const CreatePostWizard = ({defaultText, parentId}: {defaultText?: string,
   return (
     <div className="flex w-full gap-3 ">
       <LinkedProfilePicture
-        username={"@" + user.username}
+        username={user.username ?? ""}
         imageUrl={user.imageUrl}
-        pixelCount={56}
+        pixelCount={48}
       />
 
       <input

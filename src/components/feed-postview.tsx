@@ -4,8 +4,8 @@ import Link from "next/link";
 import router from "next/router";
 import { type RouterOutputs } from "~/utils/api";
 import AnimatedIcon from "./icons/animated-icon";
+import CommentIconSvg from "./icons/comment-icon-svg";
 import LinkedProfilePicture from "./linked-profile-picture";
-import CommentSvg from "./icons/comment-icon";
 
 dayjs.extend(relativeTime);
 
@@ -29,11 +29,11 @@ export const FeedPostView = ({ postWithUser }: PostProps) => {
       className="custom-transition-200 flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
     >
       <div className="flex min-w-max flex-col">
-      <LinkedProfilePicture
-        username={author.username}
-        imageUrl={author.profilePicture}
-        pixelCount={56}
-      />
+        <LinkedProfilePicture
+          username={author.username}
+          imageUrl={author.profilePicture}
+          pixelCount={48}
+        />
       </div>
 
       <div className="flex flex-col">
@@ -49,13 +49,11 @@ export const FeedPostView = ({ postWithUser }: PostProps) => {
 
         <span>{post.content}</span>
 
-        <div className="flex pt-2">
-          <AnimatedIcon
-            IconComponent={CommentSvg}
-            width={18}
-            height={18}
-            count={post.children.length}
-          />
+        <div className="group flex pt-4">
+          <AnimatedIcon IconComponent={CommentIconSvg} width={18} height={18} />
+          <span className="custom-transition-200 select-none pl-1 text-sm text-slate-300 group-hover:text-blue-500">
+            {post.children.length}
+          </span>
         </div>
       </div>
     </div>

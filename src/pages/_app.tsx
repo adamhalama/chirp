@@ -14,7 +14,14 @@ const inter = Inter({
 });
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ClerkProvider {...pageProps}>
+    <ClerkProvider {...pageProps} appearance={
+      {
+        variables: {
+          fontFamily: `font-sans`,
+          fontFamilyButtons: `font-sans`
+        }
+      }
+    }>
       
       <main className={`font-sans ${inter.variable}`}>
       <Head>

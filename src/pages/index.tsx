@@ -1,7 +1,7 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 import Feed from "~/components/feed";
-import { PageLayout } from "~/components/layout";
+import { PageLayout } from "~/components/layout/layout";
 import { CreatePostWizard } from "~/components/post-wizard";
 
 import { api } from "~/utils/api";
@@ -18,7 +18,7 @@ export default function Home() {
       <PageLayout>
         <div className="border-b border-slate-400 p-4">
           <div className="flex justify-center">
-            {!isSignedIn ? <SignInButton /> : <SignOutButton />}
+            Feed
           </div>
           {isSignedIn && <CreatePostWizard />}
         </div>
