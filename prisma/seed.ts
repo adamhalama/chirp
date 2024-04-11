@@ -6,12 +6,6 @@ const prisma = new PrismaClient();
 async function main() {
     const posts = postsData;
 
-    // for (const post of posts) {
-    //     await prisma.post.create({
-    //         data: post,
-    //     });
-    // }
-
     await prisma.post.createMany({
         data: posts,
     });

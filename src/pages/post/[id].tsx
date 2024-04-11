@@ -2,7 +2,7 @@ import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Feed from "~/components/feed";
-import { PageLayout } from "~/components/layout";
+import { PageLayout } from "~/components/layout/layout";
 import { CreatePostWizard } from "~/components/post-wizard";
 import { api } from "~/utils/api";
 import ThreadPostView from "~/components/thread-post";
