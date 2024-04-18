@@ -26,7 +26,7 @@ export const PostView = ({ postWithUser }: PostProps) => {
     <div
       key={post.id}
       onClick={handleNavigate}
-      className="custom-transition-200 flex-row gap-3 border-b border-slate-400 px-4 pt-4 transition-colors hover:bg-gray-900"
+      className="gap-3 border-b border-slate-400 px-4 transition-colors"
     >
       <div className="flex min-w-max flex-row gap-3 pb-4">
         <LinkedProfilePicture

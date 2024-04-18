@@ -22,9 +22,9 @@ const ThreadParentPost = ({ postWithUser }: PostProps) => {
     <div
       key={post.id}
       onClick={handleClick}
-      className="my-2 flex flex-row gap-3 border-slate-400 px-4"
+      className="post-view-hover flex flex-row gap-3 border-slate-400 px-4"
     >
-      <div className="flex min-w-max flex-col">
+      <div className="flex min-w-max flex-col items-center">
         <div className="flex gap-3">
           <LinkedProfilePicture
             username={author.username}
@@ -32,10 +32,10 @@ const ThreadParentPost = ({ postWithUser }: PostProps) => {
             size={12}
           />
         </div>
-        <span className="my-2 ml-6">|</span>
+        <div className="my-1 h-min w-0.5 grow bg-gray-600"></div>
       </div>
 
-      <div className="flex flex-col text-sm">
+      <div className="flex flex-col pt-4 text-sm">
         <div className="flex gap-1 text-slate-300">
           <Link href={`/@${author.username}`} className="hover:underline">
             <span>{`@${author.username}`}</span>
@@ -46,7 +46,7 @@ const ThreadParentPost = ({ postWithUser }: PostProps) => {
 
         <span>{post.content}</span>
 
-        <div className="group flex pt-2">
+        <div className="group flex py-2">
           <AnimatedIcon IconComponent={CommentIconSvg} width={18} height={18} />
           <span className="custom-transition-200 select-none pl-1 text-sm text-slate-300 group-hover:text-blue-500">
             {post.children.length}
