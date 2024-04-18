@@ -27,7 +27,6 @@ export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       </Head>
       <PageLayout>
         <div className="flex justify-center py-4 text-lg">Post Thread</div>
-
         <ThreadPostView thread={thread} />
         {isSignedIn && (
           <div className="border border-gray-300 px-5 pb-5 shadow-sm">
