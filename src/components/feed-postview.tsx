@@ -26,7 +26,7 @@ export const FeedPostView = ({ postWithUser }: PostProps) => {
     <div
       key={post.id}
       onClick={handleNavigate}
-      className="custom-transition-200 flex gap-3 border-b border-slate-400 p-4 transition-colors hover:bg-gray-900"
+      className="post-view-hover flex gap-3 border-b border-slate-400 p-4"
     >
       <div className="flex min-w-max flex-col">
         <LinkedProfilePicture
